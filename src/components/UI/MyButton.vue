@@ -1,0 +1,22 @@
+<template>
+    <button class="btn">
+        <slot></slot>
+    </button>
+</template>
+
+<script>
+    export default {
+       name: 'my-button' 
+    }
+</script>
+
+<style lang="scss" scoped>
+    .btn {
+    //   margin-top: 15px;
+      padding: 5px 10px;
+    //   background: none;
+      color: teal;
+      border: 1px solid teal;
+      font-size: 16px;
+    }
+</style>
