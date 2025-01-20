@@ -2,8 +2,8 @@
   <div>
     <h1 style="margin: 10px 0">Создание поста</h1>
     <form class="createPost" @submit.prevent>
-      <input v-model="post.title" type="text" placeholder="Название" />
-      <input v-model="post.body" type="text" placeholder="Описание" />
+      <textarea v-model="post.title" type="text" placeholder="Название" />
+      <textarea v-model="post.body" type="text" placeholder="Описание" />
       <my-button @click="createPost"> Создать </my-button>
     </form>
   </div>
@@ -35,14 +35,17 @@ export default {
 <style lang="css">
 .createPost {
   display: flex;
+  flex-direction: column;
   width: 100%;
   margin-bottom: 30px;
   padding: 10px 10px;
 }
 
-input {
-  margin-right: 10px;
-  flex: 1;
+textarea {
+  margin-bottom: 10px;
+  padding: 10px 0;
   font-size: 16px;
+  font-family: "Arial";
+  resize: none;
 }
 </style>
