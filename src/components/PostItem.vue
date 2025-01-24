@@ -1,10 +1,11 @@
 <template>
   <div class="post">
-    <div>
+    <div style="width: 80%;">
       <div><b>Название:&nbsp;&nbsp;</b>{{ post.title }}</div>
       <div><b>Описание: </b>{{ post.body }}</div>
     </div>
     <div>
+      <my-button>Открыть</my-button>
       <my-button @click="$emit('removee', post)">Удалить</my-button>
     </div>
   </div>

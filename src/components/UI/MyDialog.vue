@@ -18,7 +18,7 @@
     methods: {
         hideDialog() {
             this.$emit('update:show', false)
-        }
+        },
     }
     }
 </script>

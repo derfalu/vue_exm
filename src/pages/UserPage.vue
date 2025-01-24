@@ -27,7 +27,7 @@
       <div class="page" :class="{'current-page': pageNumber === page}" v-for="pageNumber in totalPages" :key="pageNumber" @click="changePage(pageNumber)">{{ pageNumber }}</div>
     </div> -->
     <!-- <my-pagination :pages="totalPages" @changePage="changePage"></my-pagination> -->
-    <div ref="observer" class="observer"></div>
+    <div v-intersection="{handler: loadMorePost, page: this.page, limit: this.limit}" class="observer"></div>
   </div>
 </template>
 
@@ -111,21 +111,21 @@ export default {
   },
   mounted() {
     this.fetchPosts()
-    const observerItem = this.$refs.observer
-    const options = {
-      rootMargin: '0px',
-      threshold: 1.0
-    }
+    // const observerItem = this.$refs.observer
+    // const options = {
+    //   rootMargin: '0px',
+    //   threshold: 1.0
+    // }
 
-    const callback = (entries, observer) => {
-      console.log(observer)
-      if (entries[0].isIntersecting && this.page < this.totalPages) {
-        this.loadMorePosts()
-      }
-    };
+    // const callback = (entries, observer) => {
+    //   console.log(observer)
+    //   if (entries[0].isIntersecting && this.page < this.totalPages) {
+    //     this.loadMorePosts()
+    //   }
+    // };
 
-    const observer = new IntersectionObserver(callback, options)
-    observer.observe(observerItem)
+    // const observer = new IntersectionObserver(callback, options)
+    // observer.observe(observerItem)
   },
 
   computed: {
