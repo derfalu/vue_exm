@@ -2,7 +2,7 @@
   <div>
     <h1 style="margin: 10px 0">Создание поста</h1>
     <form class="createPost" @submit.prevent>
-      <textarea v-model="post.title" type="text" placeholder="Название" />
+      <textarea v-model="post.title" type="text" placeholder="Название" v-focus/>
       <textarea v-model="post.body" type="text" placeholder="Описание" />
       <my-button @click="createPost"> Создать </my-button>
     </form>

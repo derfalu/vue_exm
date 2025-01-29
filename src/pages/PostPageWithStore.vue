@@ -27,7 +27,7 @@
       <div class="page" :class="{'current-page': pageNumber === page}" v-for="pageNumber in totalPages" :key="pageNumber" @click="changePage(pageNumber)">{{ pageNumber }}</div>
     </div> -->
     <!-- <my-pagination :pages="totalPages" @changePage="changePage"></my-pagination> -->
-    <div v-intersection="{handler: loadMorePost, page: this.page, limit: this.limit}" class="observer"></div>
+    <div v-if="!isPostLoading" v-intersection="{handler: loadMorePosts, page: page, limit: limit}" class="observer"></div>
   </div>
 </template>
 
@@ -35,6 +35,7 @@
 import PostList from '@/components/PostList.vue'
 import axios from 'axios'
 import PostForm from '@/components/PostForm.vue'
+import {mapState, mapMutations, mapActions} from 'vuex'
 
 export default {
   components: {
@@ -43,21 +44,25 @@ export default {
   },
   data() {
     return {
-      posts: [],
       dialogVisible: false,
-      isPostLoading: false,
       selectedSort: '',
       sortOptions: [
         { value: 'title', name: 'По названию' },
         { value: 'body', name: 'По описанию' }
       ],
       searchQuery: '',
-      page: 1,
       limit: 10,
       totalPages: 0
     }
   },
   methods: {
+    ...mapMutations({
+      incrementPage: 'post/incrementPage',
+      setPosts: 'post/setPosts'
+    }),
+    ...mapActions({
+      fetchPosts: 'post/fetchPosts'
+    }),
     createPost(post) {
       this.posts.push(post)
       this.dialogVisible = false
@@ -73,27 +78,27 @@ export default {
       this.fetchPosts()
     },
 
-    async fetchPosts() {
-      try {
-        this.isPostLoading = true
-        setTimeout(async () => {
-          const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-            params: {
-              _page: this.page,
-              _limit: this.limit
-            }
-          })
-          this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
-          this.posts = response.data
-          this.isPostLoading = false
-        }, 1000)
-      } catch (e) {
-        alert('Ошибка!')
-      }
-    },
+    // async fetchPosts() {
+    //   try {
+    //     this.isPostLoading = true
+    //     setTimeout(async () => {
+    //       const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+    //         params: {
+    //           _page: this.page,
+    //           _limit: this.limit
+    //         }
+    //       })
+    //       this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
+    //       this.posts = response.data
+    //       this.isPostLoading = false
+    //     }, 1000)
+    //   } catch (e) {
+    //     alert('Ошибка!')
+    //   }
+    // },
     async loadMorePosts() {
       try {
-        this.page += 1;
+        this.incrementPage()
         setTimeout(async () => {
           const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
             params: {
@@ -102,7 +107,7 @@ export default {
             }
           })
           this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
-          this.posts = [...this.posts, ...response.data]
+          this.setPosts([...this.posts, ...response.data])
         }, 1000)
       } catch (e) {
         alert('Ошибка!')
@@ -111,6 +116,8 @@ export default {
   },
   mounted() {
     this.fetchPosts()
+    console.log(mapState({ posts: 'post/posts' }))
+    console.log({...mapState({ posts: 'post/posts' })})
     // const observerItem = this.$refs.observer
     // const options = {
     //   rootMargin: '0px',
@@ -129,6 +136,13 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      posts: (state) => state.post.posts,
+      isPostLoading: (state) => state.post.isPostLoading,
+      page: (state) => state.post.page,
+      limit: (state) => state.post.limit,
+      pageLimit: (state) => state.post.pageLimit,
+    }),
     sortedPosts() {
       return [...this.posts].sort((a, b) => {
         a[this.selectedSort]?.localeCompare(b[this.selectedSort])

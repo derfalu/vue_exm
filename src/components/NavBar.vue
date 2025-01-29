@@ -2,7 +2,8 @@
   <div class="navbar">
     <h4 @click="$router.push('/')" style="margin-left: 20px; color: white; cursor: zoom-in">App</h4>
     <div class="navbar__btn">
-      <my-button @click="$router.push('/user_page')"> Посты </my-button>
+      <my-button @click="$router.push('/post_page')"> Посты </my-button>
+      <my-button @click="$router.push('/post_page_with_store')">Посты с Store</my-button>
       <my-button @click="$router.push('/about')"> О сайте </my-button>
     </div>
   </div>
@@ -20,10 +21,14 @@ export default {}
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 .navbar__btn {
-    margin-right: 10px;
-    display: flex;
-    gap: 10px;
+  margin-right: 10px;
+  display: flex;
+  gap: 10px;
 }
 </style>

@@ -6,7 +6,7 @@
     </div>
     <div>
       <my-button>Открыть</my-button>
-      <my-button @click="$emit('removee', post)">Удалить</my-button>
+      <my-button @click="$emit('remove', post)">Удалить</my-button>
     </div>
   </div>
 </template>

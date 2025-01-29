@@ -1,6 +1,7 @@
 <template>
   <nav-bar></nav-bar>
   <div class="main">
+    <h1>$store.state.post.limit</h1>
     <router-view></router-view>
   </div>
 </template>

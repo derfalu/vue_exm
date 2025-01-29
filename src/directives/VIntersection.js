@@ -1,17 +1,18 @@
 export default {
   mounted(el, binding) {
-    console.log(binding)
+
     const options = {
       rootMargin: '0px',
       threshold: 1.0
     }
-    const callback = (entries, observer) => {
-      console.log(observer)
-      if (entries[0].isIntersecting && this.page < this.totalPages) {
-        binding.value()
+    const callback = (entries, observe) => {
+      if (entries[0].isIntersecting && binding.value.page < binding.value.limit) {
+        console.log(observe)
+        binding.value.handler()
       }
     }
     const observer = new IntersectionObserver(callback, options)
     observer.observe(el)
-  }
+  },
+  name: 'intersection'
 }
