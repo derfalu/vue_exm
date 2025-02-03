@@ -4,12 +4,15 @@
     <div class="navbar__btn">
       <my-button @click="$router.push('/post_page')"> Посты </my-button>
       <my-button @click="$router.push('/post_page_with_store')">Посты с Store</my-button>
+      <my-button @click="$router.push('/post_page_with_composition_api')">Посты с Composition Api</my-button>
       <my-button @click="$router.push('/about')"> О сайте </my-button>
     </div>
   </div>
 </template>
 
 <script>
+import router from '@/router/router';
+
 export default {}
 </script>
 

@@ -27,7 +27,11 @@
       <div class="page" :class="{'current-page': pageNumber === page}" v-for="pageNumber in totalPages" :key="pageNumber" @click="changePage(pageNumber)">{{ pageNumber }}</div>
     </div> -->
     <!-- <my-pagination :pages="totalPages" @changePage="changePage"></my-pagination> -->
-    <div v-if="!isPostLoading" v-intersection="{handler: loadMorePosts, page: page, limit: limit}" class="observer"></div>
+    <div
+      v-if="!isPostLoading"
+      v-intersection="{ handler: loadMorePosts, page: page, limit: limit }"
+      class="observer"
+    ></div>
   </div>
 </template>
 
@@ -93,7 +97,7 @@ export default {
     },
     async loadMorePosts() {
       try {
-        this.page += 1;
+        this.page += 1
         setTimeout(async () => {
           const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
             params: {
@@ -131,12 +135,14 @@ export default {
   computed: {
     sortedPosts() {
       return [...this.posts].sort((a, b) => {
-        a[this.selectedSort]?.localeCompare(b[this.selectedSort])
+        return a[this.selectedSort]?.localeCompare(b[this.selectedSort])
       })
     },
 
     sortedAndSearchedPosts() {
-      return this.sortedPosts.filter((post) => post.title.toLowerCase().includes(this.searchQuery))
+      return this.sortedPosts.filter((post) => {
+        return post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      })
     }
   },
 

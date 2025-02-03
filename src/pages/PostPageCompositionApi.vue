@@ -7,10 +7,6 @@
       <my-select v-model="selectedSort" :options="sortOptions" style="font-size: 16px"> </my-select>
     </div>
 
-    <my-dialog v-model:show="dialogVisible">
-      <post-form @cretaePost="createPost" />
-    </my-dialog>
-
     <input
       v-model="searchQuery"
       style="width: 100%; text-align: right; margin: 15px 0; padding: 10px"
@@ -38,28 +34,23 @@
 <script>
 import PostList from '@/components/PostList.vue'
 import axios from 'axios'
-import PostForm from '@/components/PostForm.vue'
 import { usePosts } from '@/components/hooks/usePosts'
+import { useSortedPosts } from '@/components/hooks/useSortedPosts'
+import { useSortedAndSearchPosts } from '@/components/hooks/useSortedAndSearchPosts'
 
 export default {
   components: {
-    PostForm,
     PostList
   },
   data() {
     return {
-      posts: [],
       dialogVisible: false,
-      isPostLoading: false,
-      selectedSort: '',
       sortOptions: [
         { value: 'title', name: 'По названию' },
         { value: 'body', name: 'По описанию' }
       ],
-      searchQuery: '',
       page: 1,
-      limit: 10,
-      totalPages: 0
+      limit: 10
     }
   },
   methods: {
@@ -78,24 +69,6 @@ export default {
       this.fetchPosts()
     },
 
-    async fetchPosts() {
-      try {
-        this.isPostLoading = true
-        setTimeout(async () => {
-          const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-            params: {
-              _page: this.page,
-              _limit: this.limit
-            }
-          })
-          this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
-          this.posts = response.data
-          this.isPostLoading = false
-        }, 1000)
-      } catch (e) {
-        alert('Ошибка!')
-      }
-    },
     async loadMorePosts() {
       try {
         this.page += 1
@@ -114,13 +87,22 @@ export default {
       }
     }
   },
-  setup(props) {
-    const { posts, isPostLoading, totalPages } = usePosts(this.limit)
+  setup() {
+    const { posts, isPostLoading, totalPages } = usePosts(10)
     const { selectedSort, sortedPosts } = useSortedPosts(posts)
     const { searchQuery, sortedAndSearchedPosts } = useSortedAndSearchPosts(sortedPosts)
+
+    return {
+      posts,
+      isPostLoading,
+      totalPages,
+      selectedSort,
+      sortedPosts,
+      searchQuery,
+      sortedAndSearchedPosts
+    }
   },
   mounted() {
-    this.fetchPosts()
     // const observerItem = this.$refs.observer
     // const options = {
     //   rootMargin: '0px',
@@ -138,17 +120,7 @@ export default {
     // observer.observe(observerItem)
   },
 
-  computed: {
-    sortedPosts() {
-      return [...this.posts].sort((a, b) => {
-        a[this.selectedSort]?.localeCompare(b[this.selectedSort])
-      })
-    },
-
-    sortedAndSearchedPosts() {
-      return this.sortedPosts.filter((post) => post.title.toLowerCase().includes(this.searchQuery))
-    }
-  },
+  computed: {},
 
   watch: {
     // selectedSort(newValue) {

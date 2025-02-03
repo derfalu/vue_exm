@@ -7,25 +7,24 @@ export function usePosts(limit) {
   const isPostLoading = ref(true)
   const fetchingPosts = async () => {
     try {
-      this.isPostLoading = true
-      setTimeout(async () => {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-          params: {
-            _page: this.page,
-            _limit: limit
-          }
-        })
-        totalPages.value = Math.ceil(response.headers['x-total-count'] / limit)
-        posts.value = response.data
-        isPostLoading.value = false
-      }, 1000)
+      const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+        params: {
+          _page: 1,
+          _limit: limit
+        }
+      })
+      totalPages.value = Math.ceil(response.headers['x-total-count'] / limit)
+      posts.value = response.data
+      isPostLoading.value = false
     } catch (e) {
       alert('Ошибка!')
+    } finally {
+      isPostLoading.value = false
     }
   }
 
   onMounted(fetchingPosts)
-  
+
   return {
     posts,
     totalPages,
